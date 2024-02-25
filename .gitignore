@@ -4,7 +4,10 @@
 *
 !.gitignore
 !ervs-base.yaml
-!include/ervs/*.yaml
+
+include/*
+!include/ervs
+!include/ervs/*
 
 /.esphome/
 /secrets.yaml
