@@ -1,0 +1,85 @@
+substitutions:
+  board: esp32-s3-devkitc-1
+  name: esp32-s3-mic
+  friendly_name: ESP32 S3 ERVS
+  project_name: "HA Voice and Sensor board"
+  project_version: "1.0.0"
+
+  sclk_pin: GPIO04 # WS
+  bclk_pin: GPIO05 # CLK
+  din_pin: GPIO06  # DAT
+  sclk_pin2: GPIO09 # WS
+  bclk_pin2: GPIO10 # CLK
+  mclk_pin: GPIO0
+  WS2812_pin: GPIO39 # LED Ring In Pin
+  i2c_sda: GPIO14
+  i2c_scl: GPIO13
+  uart_tx: GPIO07
+  uart_rx: GPIO15
+  uart_tx2: GPIO41
+  uart_rx2: GPIO42
+  out_pin_2410: GPIO40
+  # sclk_pin: GPIO04 # WS
+  # bclk_pin: GPIO05 # CLK
+  # din_pin: GPIO06  # DAT
+  # mclk_pin: GPIO0
+  # WS2812_pin: GPIO48 # LED Ring In Pin
+  # i2c_sda: GPIO14
+  # i2c_scl: GPIO13
+  # uart_tx: GPIO07
+  # uart_rx: GPIO15
+  # uart_tx2: GPIO07
+  # uart_rx2: GPIO15
+  # out_pin_2410: GPIO18
+  
+  hidden_ssid: "false"
+  log_level: DEBUG
+
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+  min_version: 2023.12.8
+  name_add_mac_suffix: True
+
+packages:
+  device_base: !include include/esp32_base.yaml
+  light_base: !include include/light_base.yaml
+  ld2450_base: !include include/ld2450_base.yaml
+  ld2410_base: !include include/ld2410_base.yaml
+  # sgp40_base: !include include/sgp40_base.yaml
+  bme680_base: !include include/bme680_base.yaml
+  bh1750_base: !include include/bh1750_base.yaml
+  voice_base: !include include/voice_base.yaml
+
+logger:
+
+debug:
+  update_interval: 30s
+
+api:
+  encryption:
+    key: "fOxYHKxYcSCSjVwbhLO9lEUZZVtAoszGIJVa4aiqVA4="
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  on_connect:
+    - delay: 5s # Gives time for improv results to be transmitted
+  #  - ble.disable:
+  #on_disconnect:
+  #  - ble.enable:
+  ap:
+
+ota:
+  password: !secret wifi_password
+
+i2c:
+  sda: ${i2c_sda} #GPIO1
+  scl: ${i2c_scl} #GPIO2
+  scan: true
+  frequency: 400kHz
+  id: bus_a
+
+time:
+  - platform: sntp
+    id: time_now
