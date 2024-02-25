@@ -1,0 +1,289 @@
+# Base setup for BH1750 sensor
+# dependencies:
+#   UART2 pins defined
+# source:
+#   https://www.screek.io/2a/
+#   https://docs.screek.io/2a
+
+uart:
+  - id: uart_bus_ld2410
+    tx_pin: 
+      number: ${uart_tx2} # GPIO17
+      mode:
+        input: true
+        pullup: true
+    rx_pin: 
+      number: ${uart_rx2} #GPIO16
+      mode:
+        input: true
+        pullup: true
+    baud_rate: 256000
+    parity: NONE
+    stop_bits: 1
+    data_bits: 8
+
+ld2410:
+  uart_id: uart_bus_ld2410
+
+sensor:
+  - platform: ld2410
+    light:
+      name: 2410 light
+    moving_distance:
+      name : 2410 Moving Distance
+    still_distance:
+      name: 2410 Still Distance
+    moving_energy:
+      name: 2410 Move Energy
+    still_energy:
+      name: 2410 Still Energy
+    detection_distance:
+      name: 2410 Detection Distance
+    g0:
+      move_energy:
+        name: 2410 g0 move energy
+        disabled_by_default: True
+      still_energy:
+        name: 2410 g0 still energy
+        disabled_by_default: True
+    g1:
+      move_energy:
+        name: 2410 g1 move energy
+        disabled_by_default: True
+      still_energy:
+        name: 2410 g1 still energy
+        disabled_by_default: True
+    g2:
+      move_energy:
+        name: 2410 g2 move energy
+        disabled_by_default: True
+      still_energy:
+        name: 2410 g2 still energy
+        disabled_by_default: True
+    g3:
+      move_energy:
+        name: 2410 g3 move energy
+        disabled_by_default: True
+      still_energy:
+        name: 2410 g3 still energy
+        disabled_by_default: True
+    g4:
+      move_energy:
+        name: 2410 g4 move energy
+        disabled_by_default: True
+      still_energy:
+        name: 2410 g4 still energy
+        disabled_by_default: True
+    g5:
+      move_energy:
+        name: 2410 g5 move energy
+        disabled_by_default: True
+      still_energy:
+        name: 2410 g5 still energy
+        disabled_by_default: True
+    g6:
+      move_energy:
+        name: 2410 g6 move energy
+        disabled_by_default: True
+      still_energy:
+        name: 2410 g6 still energy
+        disabled_by_default: True
+    g7:
+      move_energy:
+        name: 2410 g7 move energy
+        disabled_by_default: True
+      still_energy:
+        name: 2410 g7 still energy
+        disabled_by_default: True
+    g8:
+      move_energy:
+        name: 2410 g8 move energy
+        disabled_by_default: True
+      still_energy:
+        name: 2410 g8 still energy
+        disabled_by_default: True
+
+button:
+  - platform: ld2410
+    factory_reset:
+      name: "Factory Reset mmWave 2410"
+      disabled_by_default: true
+    restart:
+      name: "Restart mmWave 2410"
+      disabled_by_default: true
+    query_params:
+      name: Get Values
+      disabled_by_default: true
+
+select:
+  - platform: ld2410
+    distance_resolution:
+      name: "2410 Distance Gate Resolution"
+      disabled_by_default: true
+    baud_rate:
+      name: "2410 mmWave Sensor Baud Rate"
+      disabled_by_default: true
+    light_function:
+      name: 2410 mmWave Light Function
+      disabled_by_default: true
+    out_pin_level:
+      name: 2410 GPIO Pin Level
+      disabled_by_default: true
+
+binary_sensor:
+  - platform: template
+    name: "Room Presence"
+    device_class: occupancy
+    #  if ((id(has_target).state) or (id(any_target_exsits).state)) {
+    lambda: !lambda |-
+      if ((id(has_target).state)) {
+        return true;
+      } else {
+        return false;
+      }
+  - platform: ld2410
+    has_target:
+      id: has_target
+      name: 2410 Occupancy
+    has_moving_target:
+      name: 2410 Moving Target
+      id: moving_target_2410
+      on_state:
+        if:
+          condition:
+             binary_sensor.is_on: moving_target_2410
+          then:
+            - light.turn_on:
+                id: sys_status
+                blue: 100%
+                effect: none
+          else:
+            - light.turn_on:
+                id: sys_status
+                blue: 0%
+    has_still_target:
+      name: 2410 Still Target
+      id: still_target_2410
+      on_state:
+        if:
+          condition:
+             binary_sensor.is_on: still_target_2410
+          then:
+            - light.turn_on:
+                id: sys_status
+                green: 100%
+                effect: none
+          else:
+            - light.turn_on:
+                id: sys_status
+                green: 0%
+  - platform: gpio
+    pin: ${out_pin_2410}
+    name: 2410 Occupancy
+    device_class: Occupancy
+
+number:
+  - platform: ld2410
+    timeout:
+      name: 2410 Occupancy Off Delay
+    light_threshold:
+      id: light_threshold_2410
+      name: 2410 mmWave Light Threshold
+      disabled_by_default: True
+    max_move_distance_gate:
+      name: 2410 Max Movement Distance Gate
+    max_still_distance_gate:
+      name: 2410 Max Still Distance Gate
+    g0:
+      move_threshold:
+        name: 2410 Gate 0 Movement Sensitivity
+      still_threshold:
+        name: 2410 Gate 0 Still Sensitivity
+    g1:
+      move_threshold:
+        name: 2410 Gate 1 Movement Sensitivity
+      still_threshold:
+        name: 2410 Gate 1 Still Sensitivity
+    g2:
+      move_threshold:
+        name: 2410 Gate 2 Movement Sensitivity
+      still_threshold:
+        name: 2410 Gate 2 Still Sensitivity
+    g3:
+      move_threshold:
+        name: 2410 Gate 3 Movement Sensitivity
+      still_threshold:
+        name: 2410 Gate 3 Still Sensitivity
+    g4:
+      move_threshold:
+        name: 2410 Gate 4 Movement Sensitivity
+      still_threshold:
+        name: 2410 Gate 4 Still Sensitivity
+    g5:
+      move_threshold:
+        name: 2410 Gate 5 Movement Sensitivity
+      still_threshold:
+        name: 2410 Gate 5 Still Sensitivity
+    g6:
+      move_threshold:
+        name: 2410 Gate 6 Movement Sensitivity
+      still_threshold:
+        name: 2410 Gate 6 Still Sensitivity
+    g7:
+      move_threshold:
+        name: 2410 Gate 7 Movement Sensitivity
+      still_threshold:
+        name: 2410 Gate 7 Still Sensitivity
+    g8:
+      move_threshold:
+        name: 2410 Gate 8 Movement Sensitivity
+      still_threshold:
+        name: 2410 Gate 8 Still Sensitivity
+  - platform: template
+    name: "Presence LED Brightness"
+    id: pd_status_brightness
+    min_value: 0
+    max_value: 100
+    step: 1
+    mode: slider
+    update_interval: never
+    optimistic: true
+    restore_value: true
+    initial_value: 40
+    icon: "mdi:brightness-5"
+    entity_category: config
+    on_value:
+      then:
+        - light.turn_on:
+            id: sys_status
+            brightness: !lambda "return x/100;"
+
+text_sensor:
+  - platform: ld2410
+    version:
+      name: "mmWave Firmware Version 2410"
+    mac_address:
+      name: "mmWave MAC Address 2410"
+      disabled_by_default: true
+
+switch:
+  - platform: ld2410
+    engineering_mode:
+      name: "2410 Engineering Mode"
+      id: "engineering_mode"
+      disabled_by_default: true
+    bluetooth:
+      name: "2410 mmWave Bluetooth"
+      disabled_by_default: true
+
+light:
+  - platform: partition
+    id: sys_status
+    name: "Sys Status"
+    segments:
+      - id: led_light
+        from: 7
+        to: 7
+    internal: true
+   
+# script:

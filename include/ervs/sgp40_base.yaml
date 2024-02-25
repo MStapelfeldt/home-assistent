@@ -1,0 +1,26 @@
+# Base setup for SGP40 sensor
+# dependencies:
+#   I2C bus enabled
+#   bme680_base -> Temperature, humidity
+# source:
+#   https://esphome.io/components/sensor/bme680_bsec
+sensor:
+- platform: sgp4x
+  voc:
+    name: "VOC Index"
+  nox:
+    name: "NOx Index"
+  compensation:
+    humidity_source: bme680_humidity
+    temperature_source: bme680_temperature
+
+binary_sensor:
+number:
+
+text_sensor:
+
+switch:
+
+light:
+   
+script:

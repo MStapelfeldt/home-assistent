@@ -1,0 +1,25 @@
+# sensor:
+
+# binary_sensor:
+
+# number:
+
+# text_sensor:
+
+# switch:
+
+light:
+  - platform: esp32_rmt_led_strip # neopixelbus
+    id: led_light
+    rgb_order: GRB
+    #type: grb
+    pin: ${WS2812_pin} # DIN pin of the LED Strip
+    num_leds: 8        # change the Number of LEDS according to your LED Strip.
+    name: "Light"
+    rmt_channel: 0
+    chipset: ws2812
+    # variant: ws2812x
+    default_transition_length: 0.5s
+    internal: true
+   
+# script:

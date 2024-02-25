@@ -1,0 +1,60 @@
+
+# Base setup for BH1750 sensor
+# dependencies:
+#   I2C bus enabled
+# source:
+#   https://esphome.io/components/sensor/bh1750.html
+#   https://everythingsmarthome.co.uk/
+
+substitutions:
+  illuminance_update_interval: "2s"
+
+globals:
+  - id: last_illuminance
+    type: float
+    restore_value: no
+    initial_value: "-1"
+
+sensor:
+  - platform: bh1750
+    name: Illuminance
+    id: illuminance_sensor
+    address: 0x23
+    update_interval: ${illuminance_update_interval}
+    filters:
+      - lambda: "return x + id(illuminance_offset_ui).state;"
+
+# binary_sensor:
+
+number:
+  - platform: template
+    name: "Illuminance Offset"
+    id: illuminance_offset_ui
+    unit_of_measurement: "lx"
+    min_value: -100
+    max_value: 100
+    step: 5
+    mode: slider
+    update_interval: never
+    optimistic: true
+    restore_value: true
+    initial_value: 0
+    icon: "mdi:brightness-5"
+    entity_category: config
+    on_value:
+      - lambda: 'id(illuminance_sensor).update();'
+
+# text_sensor:
+
+switch:
+  - platform: template
+    name: Illuminance Fast-Update
+    id: bh1750_fast_update
+    optimistic: True
+    entity_category: diagnostic
+    restore_mode: RESTORE_DEFAULT_OFF
+    icon: mdi:run-fast
+
+# light:
+
+# script:

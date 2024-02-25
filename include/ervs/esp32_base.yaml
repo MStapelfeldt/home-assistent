@@ -1,0 +1,116 @@
+# Base setup for ESP32-S3-WROOM-1-N16R8 MCU
+# dependencies:
+# source:
+#   https://www.screek.io/2a/
+#   https://docs.screek.io/2a
+
+
+esphome:
+  on_boot:
+    - priority: 100
+      then:
+        lambda: |-
+          id(cpu_speed) = ESP.getCpuFreqMHz();
+
+
+esp32:
+  board: ${board}
+  flash_size: 16MB
+  framework:
+    type: arduino # esp-idf
+    version: recommended
+    
+psram:
+  mode: octal
+  speed: 80MHz
+  
+globals:
+  - id: cpu_speed
+    type: int
+    restore_value: no
+    initial_value: '0'
+
+sensor:
+  - platform: template
+    name: "ESP CPU Speed"
+    accuracy_decimals: 0
+    icon: mdi:cpu-32-bit
+    unit_of_measurement: Mhz
+    disabled_by_default: True
+    lambda: |-
+      return (id(cpu_speed));
+    entity_category: "diagnostic"
+    update_interval: 600s
+  - platform: template
+    id: sys_esp_temperature
+    name: ESP Temperature
+    lambda: return temperatureRead();
+    unit_of_measurement: °C
+    device_class: TEMPERATURE
+    update_interval: 45s
+    entity_category: "diagnostic"
+  - platform: uptime
+    name: ESP Uptime
+    id: sys_uptime
+    update_interval: 60s
+  - platform: wifi_signal 
+    name: RSSI
+    id: wifi_signal_db
+    update_interval: 60s
+    entity_category: "diagnostic"
+  - platform: template
+    id: esp_memory
+    icon: mdi:memory
+    name: ESP Free Memory
+    lambda: return heap_caps_get_free_size(MALLOC_CAP_INTERNAL) / 1024;
+    unit_of_measurement: 'kB'
+    state_class: measurement
+    entity_category: "diagnostic"
+    update_interval: 60s
+
+output:
+  - platform: gpio
+    id: board_info_ed
+    pin: GPIO12
+
+button:
+  - platform: restart
+    icon: mdi:power-cycle
+    name: "ESP Reboot"
+    entity_category: diagnostic
+
+# binary_sensor:
+# number:
+
+text_sensor:
+  - platform: debug
+    reset_reason:
+      name: "ESP Reset Reason"
+      icon: mdi:anchor
+      disabled_by_default: True
+  - platform: wifi_info
+    ip_address:
+      name: ESP IP Address
+      entity_category: "diagnostic"
+      disabled_by_default: True
+      icon: mdi:ip-network
+    mac_address:
+      name: ESP MAC
+      entity_category: "diagnostic"
+      icon: mdi:ip-network
+      disabled_by_default: True
+
+switch:
+  - platform: factory_reset
+    name: Factory Reset
+    disabled_by_default: True
+    icon: mdi:heart-broken
+
+light:
+  - platform: binary
+    name: "Red Info Light"
+    output: board_info_ed
+    entity_category: "config"
+    restore_mode: ALWAYS_OFF
+   
+# script:

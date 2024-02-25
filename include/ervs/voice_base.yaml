@@ -1,0 +1,400 @@
+# Base setup for Voice assistant
+# dependencies:
+#   I2C bus enabled
+#   bme680_base -> Temperature, humidity
+# source:
+#   https://esphome.io/components/sensor/bme680_bsec
+substitutions:
+  voice_assist_idle_phase_id: '1'
+  voice_assist_wakeword_detected: '2'
+  voice_assist_thinking_phase_id: '3'
+  voice_assist_replying_phase_id: '4'
+  voice_assist_not_ready_phase_id: '10'
+  voice_assist_error_phase_id: '11'
+  voice_assist_muted_phase_id: '12'
+
+esphome:
+  on_boot:
+    - priority: 600
+      then:
+        - number.increment: va_status_brightness
+        - delay: 1s
+        - number.decrement: va_status_brightness
+        - script.execute: control_led
+        - delay: 30s
+        - if:
+            condition:
+              lambda: return id(init_in_progress);
+            then:
+              - lambda: id(init_in_progress) = false;
+              - script.execute: control_led
+    - priority: -100
+      then:
+      - wait_until: api.connected
+      - delay: 1s
+      - if:
+          condition:
+            switch.is_on: use_wake_word
+          then:
+            - voice_assistant.start_continuous:
+
+globals:
+  - id: voice_assistant_phase
+    type: int
+    restore_value: no
+    initial_value: ${voice_assist_not_ready_phase_id}
+  - id: voice_assistant_last_status
+    type: int
+    restore_value: no
+    initial_value: ${voice_assist_idle_phase_id}
+  - id: init_in_progress
+    type: bool
+    restore_value: no
+    initial_value: 'true'
+
+external_components:
+  - source: github://rpatel3001/esphome@es7210
+    components: [ es7210 ]
+  - source: github://pr#5230
+    components:
+      - esp_adf
+      
+es7210:
+  address: 0x40
+
+# sensor:
+
+i2s_audio:
+  - id: codec
+    i2s_lrclk_pin: ${sclk_pin2} #GPIO26 #ws
+    i2s_bclk_pin: ${bclk_pin2} #GPIO27 #clk
+    i2s_mclk_pin:
+       number: ${mclk_pin} #GPIO0
+       allow_other_uses: true
+       ignore_strapping_warning: true
+  - id: mic_adc
+    i2s_lrclk_pin: ${sclk_pin} #GPIO26 #ws
+    i2s_bclk_pin: ${bclk_pin} #GPIO27 #clk
+    i2s_mclk_pin:
+       number: ${mclk_pin} #GPIO0
+       allow_other_uses: true
+       ignore_strapping_warning: true
+
+microphone:
+  - platform: i2s_audio
+    id: mic_i2s
+    i2s_audio_id: mic_adc
+    i2s_din_pin: ${din_pin} #GPIO36
+    adc_type: external
+    channel: left
+    pdm: false
+
+voice_assistant:
+  id: va
+  microphone: mic_i2s
+  #  media_player: media_player_speaker
+  noise_suppression_level: 2
+  use_wake_word: true
+  auto_gain: 31dBFS
+  volume_multiplier: 2.5
+  
+  # on_wake_word_detected: # "hey jarvis"
+  #   - lambda: |-
+  #       if(id(voice_assistant_phase) == ${voice_assist_idle_phase_id}){
+  #         id(voice_assistant_phase) = ${voice_assist_wakeword_detected};
+  #       }
+  #   - script.execute: control_led
+
+  # on_stt_vad_end: # Voice end and progressing starts
+  #   - lambda: |-
+  #       if(id(voice_assistant_phase) == ${voice_assist_wakeword_detected}){
+  #         id(voice_assistant_phase) = ${voice_assist_thinking_phase_id};
+  #       }
+  #   - lambda: id(voice_assistant_phase) = ${voice_assist_thinking_phase_id};
+  #   - script.execute: control_led
+
+  # on_tts_start: # text-to-speech started
+  #   - lambda: |-
+  #       if(id(voice_assistant_phase) == ${voice_assist_thinking_phase_id}){
+  #         id(voice_assistant_phase) = ${voice_assist_replying_phase_id};
+  #       }
+  #   - lambda: id(voice_assistant_phase) = ${voice_assist_replying_phase_id};
+  #   - script.execute: control_led
+  # on_end: # voice assist is done and back to idle
+  #   - lambda: id(voice_assistant_phase) = ${voice_assist_idle_phase_id};
+  #   - script.execute: control_led
+  # on_error: 
+  #   - if:
+  #       condition:
+  #         lambda: return !id(init_in_progress);
+  #       then:
+  #         - lambda: id(voice_assistant_phase) = ${voice_assist_error_phase_id};
+  #         - script.execute: control_led
+  #         - delay: 1s
+  #         - lambda: id(voice_assistant_phase) = ${voice_assist_idle_phase_id};
+  #         - script.execute: control_led
+
+  # on_client_connected: 
+  #   - if:
+  #       condition:
+  #         switch.is_on: use_wake_word
+  #       then:
+  #         - voice_assistant.start_continuous
+  #         - lambda: id(voice_assistant_phase) = ${voice_assist_idle_phase_id};
+  #       else:
+  #         - lambda: id(voice_assistant_phase) = ${voice_assist_muted_phase_id};
+  #   - script.execute: control_led          
+
+  # on_client_disconnected: 
+  #   - lambda: id(voice_assistant_phase) = ${voice_assist_not_ready_phase_id};
+  #   - script.execute: control_led
+  on_wake_word_detected:
+    - light.turn_on:
+        id: va_status
+        effect: "Scan"
+        red: 0%
+        green: 50%
+        blue: 93%
+  on_stt_vad_end:
+    - light.turn_on:
+        id: va_status
+        effect: "Rainbow"
+
+  on_tts_start:
+    - light.turn_on:
+        id: va_status
+        blue: 100%
+        red: 0%
+        green: 0%
+        effect: "slow_pulse"
+  on_end:
+    - delay: 100ms
+    - light.turn_off:
+        id: va_status
+  on_error:
+    - light.turn_on:
+        id: va_status
+        red: 100%
+        green: 0%
+        blue: 0%
+        effect: "fast_pulse"
+    - if:
+        condition:
+          switch.is_on: use_wake_word
+        then:
+          - switch.turn_off: use_wake_word
+          - delay: 1sec 
+          - switch.turn_on: use_wake_word  
+  on_client_connected:
+    - if:
+        condition:
+          switch.is_on: use_wake_word
+        then:
+          - voice_assistant.start_continuous:
+          - script.execute: reset_led
+  on_client_disconnected:
+    - if:
+        condition:
+          switch.is_on: use_wake_word
+        then:
+          - voice_assistant.stop:
+          - light.turn_off: va_status
+
+binary_sensor:
+  - platform: status
+    name: API Connection
+    id: api_connection
+    filters:
+      - delayed_on: 1s
+    on_press:
+      - if:
+          condition:
+            switch.is_on: use_wake_word
+          then:
+            - voice_assistant.start_continuous:
+    on_release:
+      - if:
+          condition:
+            switch.is_on: use_wake_word
+          then:
+            - voice_assistant.stop:
+  - platform: status
+    name: Online
+    id: ink_ha_connected
+number:
+  - platform: template
+    name: "VA LED Brightness"
+    id: va_status_brightness
+    min_value: 0
+    max_value: 100
+    step: 1
+    mode: slider
+    update_interval: never
+    optimistic: true
+    restore_value: true
+    initial_value: 40
+    icon: "mdi:brightness-5"
+    entity_category: config
+    on_value:
+      then:
+        - light.turn_on:
+            id: va_status
+            brightness: !lambda "return x/100;"
+
+# text_sensor:
+
+switch:
+  - platform: template
+    name: Use wake word
+    id: use_wake_word
+    optimistic: true
+    restore_mode: RESTORE_DEFAULT_ON
+    entity_category: config
+    on_turn_on:
+      - if:
+          condition:
+            lambda: return !id(init_in_progress);
+          then:
+            - lambda: id(voice_assistant_phase) = ${voice_assist_idle_phase_id};
+            - if:
+                condition:
+                    not:
+                      - voice_assistant.is_running
+                then:
+                  - voice_assistant.start_continuous
+            - script.execute: control_led          
+    on_turn_off:
+      - if:
+          condition:
+            lambda: return !id(init_in_progress);
+          then:
+            - voice_assistant.stop
+            - lambda: id(voice_assistant_phase) = ${voice_assist_muted_phase_id};
+            - script.execute: control_led    
+    # on_turn_on:
+    #   - lambda: id(va).set_use_wake_word(true);
+    #   - if:
+    #       condition:
+    #         not:
+    #           - voice_assistant.is_running
+    #       then:
+    #         - voice_assistant.start_continuous
+    #   - script.execute: reset_led
+    # on_turn_off:
+    #   - voice_assistant.stop
+    #   - lambda: id(va).set_use_wake_word(false);
+    #   - script.execute: reset_led
+  - platform: template
+    name: Use Listen Light
+    id: use_listen_light
+    optimistic: true
+    restore_mode: RESTORE_DEFAULT_ON
+    entity_category: config
+    on_turn_on:
+      - script.execute: reset_led
+    on_turn_off:
+      - script.execute: reset_led
+
+light:
+  - platform: partition
+    id: va_status
+    name: "VA Status"
+    segments:
+      - id: led_light
+        from: 1
+        to: 6 
+    effects:
+      - addressable_scan:
+          name: Scan
+          move_interval: 200ms
+          scan_width: 2
+      - addressable_rainbow:
+          name: Rainbow
+          speed: 10
+          width: 50
+      - pulse:
+          name: "fast_pulse"
+          transition_length: 100ms
+          update_interval: 100ms
+          min_brightness: 50%
+          max_brightness: 100%
+      - pulse:
+          name: "slow_pulse"
+          transition_length: 250ms
+          update_interval: 250ms
+          min_brightness: 50%
+          max_brightness: 100%
+    internal: true
+   
+script:
+  - id: control_led
+    then:
+      - if:
+          condition:
+            lambda: return !id(init_in_progress);
+          then:
+            - if:
+                condition:
+                    wifi.connected:
+                then:
+                  - if:
+                      condition:
+                          api.connected:
+                      then:
+                        - lambda: |
+                            if(id(voice_assistant_phase) != id(voice_assistant_last_status)){
+                              id(voice_assistant_last_status) = id(voice_assistant_phase);
+                              switch(id(voice_assistant_phase)) {
+                                case ${voice_assist_wakeword_detected}:
+                                  id(va_status).turn_on().set_rgb(0, 0, 1).set_brightness(1.0).set_effect("Scan").perform();
+                                  break;
+                                case ${voice_assist_thinking_phase_id}:
+                                  id(va_status).turn_on().set_effect("Rainbow").perform();
+                                  break;
+                                case ${voice_assist_replying_phase_id}:
+                                  id(va_status).turn_on().set_rgb(0, 1, 0).set_brightness(1.0).set_effect("slow_pulse").perform();
+                                  break;
+                                case ${voice_assist_error_phase_id}:
+                                  id(va_status).turn_on().set_rgb(1, 0, 0).set_brightness(.5).set_effect("fast_pulse").perform();
+                                  break;
+                                case ${voice_assist_muted_phase_id}:
+                                  id(va_status).turn_off().perform();
+                                  break;
+                                case ${voice_assist_not_ready_phase_id}:
+                                  id(va_status).turn_on().perform();
+                                  break;
+                                default:
+                                  id(va_status).turn_on().set_rgb(0, 0, 1).set_brightness(0.1).set_effect("none").perform();
+                                  break;
+                              }
+
+                            }
+                      else:
+                        - light.turn_off:
+                            id: va_status
+                else:
+                  - light.turn_off:
+                      id: va_status
+          else:
+            - light.turn_on:
+                id: va_status
+                blue: 50%
+                red: 50%
+                green: 50%
+                effect: "fast_pulse"
+  - id: reset_led
+    then:
+      - if:
+          condition:
+            - switch.is_on: use_wake_word
+            - switch.is_on: use_listen_light
+          then:
+            - light.turn_on:
+                id: va_status
+                red: 0%
+                green: 25%
+                blue: 0%
+                brightness: 10%
+                effect: none
+          else:
+            - light.turn_off: va_status
