@@ -46,7 +46,7 @@ packages:
   light_base: !include include/ervs/light_base.yaml
   ld2450_base: !include include/ervs/ld2450_base.yaml
   ld2410_base: !include include/ervs/ld2410_base.yaml
-  # sgp40_base: !include include/sgp40_base.yaml
+  # sgp40_base: !include include/ervs/sgp40_base.yaml
   ov5640_base: !include include/ervs/camera_base.yaml
   bme680_base: !include include/ervs/bme680_base.yaml
   bh1750_base: !include include/ervs/bh1750_base.yaml
