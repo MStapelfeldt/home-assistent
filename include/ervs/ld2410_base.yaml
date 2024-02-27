@@ -1,9 +1,13 @@
-# Base setup for BH1750 sensor
+# Base setup for LD2410 sensor
 # dependencies:
 #   UART2 pins defined
 # source:
-#   https://www.screek.io/2a/
-#   https://docs.screek.io/2a
+#   https://esphome.io/
+
+##################################################################
+# the LD2410 indicates moving or still targets, but only one.
+# By default moving_target reacts with blue LED and still_target is indicated by green LED.
+# Maximum Brightness can be set by Presence LED Brightness
 
 uart:
   - id: uart_bus_ld2410

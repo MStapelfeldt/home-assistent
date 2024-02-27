@@ -5,12 +5,12 @@ substitutions:
   project_name: "HA Voice and Sensor board"
   project_version: "1.0.0"
 
-  sclk_pin: GPIO04 # WS
-  bclk_pin: GPIO05 # CLK
+  sclk_pin: GPIO35 # WS
+  bclk_pin: GPIO47 # CLK
   din_pin: GPIO06  # DAT
   sclk_pin2: GPIO09 # WS
   bclk_pin2: GPIO10 # CLK
-  mclk_pin: GPIO0
+  mclk_pin: GPIO02
   WS2812_pin: GPIO39 # LED Ring In Pin
   i2c_sda: GPIO14
   i2c_scl: GPIO13
@@ -19,6 +19,9 @@ substitutions:
   uart_tx2: GPIO41
   uart_rx2: GPIO42
   out_pin_2410: GPIO40
+  cam_clk_pin: GPIO03
+  i2c2_sda: GPIO05
+  i2c2_scl: GPIO06
   # sclk_pin: GPIO04 # WS
   # bclk_pin: GPIO05 # CLK
   # din_pin: GPIO06  # DAT

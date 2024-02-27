@@ -3,7 +3,11 @@
 #   I2C bus enabled
 #   bme680_base -> Temperature, humidity
 # source:
-#   https://esphome.io/components/sensor/bme680_bsec
+#   https://esphome.io/components/sensor/sgp4x.html
+
+######################################################
+# NOT IN USE ANYMORE
+
 sensor:
 - platform: sgp4x
   voc:
@@ -14,13 +18,13 @@ sensor:
     humidity_source: bme680_humidity
     temperature_source: bme680_temperature
 
-binary_sensor:
-number:
+# binary_sensor:
+# number:
 
-text_sensor:
+# text_sensor:
 
-switch:
+# switch:
 
-light:
+# light:
    
-script:
+# script:

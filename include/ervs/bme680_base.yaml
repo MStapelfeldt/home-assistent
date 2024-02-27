@@ -5,6 +5,17 @@
 #   light_base -> led indication of quality
 # source:
 #   https://esphome.io/components/sensor/bme680_bsec
+#   https://github.com/tao-j/esphome
+
+####################################################################
+# LED 0 (First LED in row) indicates the Air quality by going from Green over Yellow to Red.
+# Normally BME680 bsec has a text_sensor which indicates <50 as Excellent and >350 as Extremely polluted.
+# With number: max_iaq_value it's possible to set the maximum tollerated value between 250 and 500.
+# Yellow will be max_iaq_value/2 which equals green: 100% and yellow: 100%.
+# Everything underneath 50% of max_iaq_value dims the red LED and everything above dims green LED,
+# which gives a color fading.
+# To be implemented:
+# when iaq reaches max_iaq_value there should be a buzzer sound with 1sec every 60sec on max and increasing intensity till max_iaq_value*2 equals full tone.
 
 esphome:
     - priority: 800
@@ -64,6 +75,10 @@ sensor:
     breath_voc_equivalent:
       name: "BME680 Breath VOC Equivalent"
       device_class: volatile_organic_compounds
+  - platform: absolute_humidity
+    name: Absolute Humidity
+    temperature: bme680_temperature
+    humidity: bme680_humidity
 
 # binary_sensor:
 
@@ -132,7 +147,7 @@ number:
             id: aqs_status
             brightness: !lambda "return x/100;"
 
-text_sensor:
+#text_sensor:
   # - platform: template
   #   name: "BME680 IAQ Classification"
   #   icon: "mdi:checkbox-marked-circle-outline"

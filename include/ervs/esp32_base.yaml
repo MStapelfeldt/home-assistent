@@ -1,9 +1,12 @@
 # Base setup for ESP32-S3-WROOM-1-N16R8 MCU
 # dependencies:
 # source:
+#   https://esphome.io
 #   https://www.screek.io/2a/
 #   https://docs.screek.io/2a
 
+##################################################
+# These are basicly standard setups from esp32.
 
 esphome:
   on_boot:
@@ -68,10 +71,7 @@ sensor:
     entity_category: "diagnostic"
     update_interval: 60s
 
-output:
-  - platform: gpio
-    id: board_info_ed
-    pin: GPIO12
+# output:
 
 button:
   - platform: restart

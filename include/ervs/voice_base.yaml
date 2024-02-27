@@ -1,9 +1,12 @@
 # Base setup for Voice assistant
 # dependencies:
 #   I2C bus enabled
-#   bme680_base -> Temperature, humidity
 # source:
-#   https://esphome.io/components/sensor/bme680_bsec
+#   https://esphome.io/components/voice_assistant.html
+#   https://everythingsmarthome.co.uk/
+# Github issue discussion: https://github.com/esphome/feature-requests/issues/2430
+# https://github.com/rich33584/voice_assistant/blob/main/voice_assistant_code.yaml <-- Experimental, not in use atm
+
 substitutions:
   voice_assist_idle_phase_id: '1'
   voice_assist_wakeword_detected: '2'
@@ -20,14 +23,14 @@ esphome:
         - number.increment: va_status_brightness
         - delay: 1s
         - number.decrement: va_status_brightness
-        - script.execute: control_led
+#        - script.execute: control_led
         - delay: 30s
         - if:
             condition:
               lambda: return id(init_in_progress);
             then:
               - lambda: id(init_in_progress) = false;
-              - script.execute: control_led
+#              - script.execute: control_led
     - priority: -100
       then:
       - wait_until: api.connected

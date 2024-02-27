@@ -1,9 +1,14 @@
-# Base setup for BH1750 sensor
+# Base setup for LD2450 sensor
 # dependencies:
 #   UART1 pins defined
 # source:
 #   https://www.screek.io/2a/
 #   https://docs.screek.io/2a
+
+##################################################################
+# the LD2450 indicates up to 3 targets, but still targets often disappear.
+# By default any detected targets gets indicated by red LED.
+# Maximum Brightness can be set by Presence LED Brightness from ld2410 base file.
 
 esphome:
   on_boot:
