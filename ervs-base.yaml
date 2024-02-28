@@ -1,39 +1,61 @@
 substitutions:
-  board: esp32-s3-devkitc-1
-  name: esp32-s3-mic
+  board: esp32-s3-devkitc-1 
+  variant: esp32s3
+  name: esp32-s3-ervs
   friendly_name: ESP32 S3 ERVS
   project_name: "HA Voice and Sensor board"
   project_version: "1.0.0"
-
-  sclk_pin: GPIO35 # WS
-  bclk_pin: GPIO47 # CLK
-  din_pin: GPIO06  # DAT
-  sclk_pin2: GPIO09 # WS
-  bclk_pin2: GPIO10 # CLK
-  mclk_pin: GPIO02
-  WS2812_pin: GPIO39 # LED Ring In Pin
-  i2c_sda: GPIO14
-  i2c_scl: GPIO13
-  uart_tx: GPIO07
-  uart_rx: GPIO15
-  uart_tx2: GPIO41
-  uart_rx2: GPIO42
-  out_pin_2410: GPIO40
+# Pin mapping for ERVS V0.2
+  bclk_pin: GPIO02 # WS
+  lrclk_pin: GPIO47 # CLK
+  din_pin: GPIO04  # DAT
+  mute_pin: GPIO16
+  i2s_dout_pin: GPIO10
+  bclk_pin2: GPIO37 # WS
+  lrclk_pin2: GPIO01 # CLK
+  mclk_pin: GPIO00
+  WS2812_pin: GPIO48 # LED Ring In Pin
+  i2c_sda: GPIO08
+  i2c_scl: GPIO18
+  uart_tx: GPIO43
+  uart_rx: GPIO44
+  uart_tx2: GPIO14
+  uart_rx2: GPIO13
+  out_pin_2410: GPIO46
   cam_clk_pin: GPIO03
-  i2c2_sda: GPIO05
-  i2c2_scl: GPIO06
-  # sclk_pin: GPIO04 # WS
-  # bclk_pin: GPIO05 # CLK
-  # din_pin: GPIO06  # DAT
-  # mclk_pin: GPIO0
+  buz_pin: GPIO17
+  # substitutions can't be used in camera_base, so this is only for reference
+  # cam_d0: GPIO40    # Camera Data pin 0
+  # cam_d1: GPIO42    # Camera Data pin 1
+  # cam_d2: GPIO21    # Camera Data pin 2
+  # cam_d3: GPIO41    # Camera Data pin 3
+  # cam_d4: GPIO39    # Camera Data pin 4
+  # cam_d5: GPIO12    # Camera Data pin 5
+  # cam_d6: GPIO11    # Camera Data pin 6
+  # cam_d7: GPIO09    # Camera Data pin 7
+  # cam_vsync: GPIO07 # Camera VSYNC
+  # cam_href: GPIO15  # Camera HREF
+  # cam_pclk: GPIO38  # Camera Pixel Clock
+  # cam_xclk: GPIO03  # Camera External Clock
+  # i2c2_sda: GPIO05  # Camera SDA
+  # i2c2_scl: GPIO06  # Camera SCL
+  # cam_reset: GPIO36 # Camera Reset
+  
+# Pin mapping for ERVS V0.1
+  # bclk_pin: GPIO17 # WS
+  # lrclk_pin: GPIO47 # CLK
+  # din_pin: GPIO04  # DAT
+  # mclk_pin: GPIO02
+  # i2s_dout_pin: GPIO10
   # WS2812_pin: GPIO48 # LED Ring In Pin
-  # i2c_sda: GPIO14
-  # i2c_scl: GPIO13
-  # uart_tx: GPIO07
-  # uart_rx: GPIO15
-  # uart_tx2: GPIO07
-  # uart_rx2: GPIO15
-  # out_pin_2410: GPIO18
+  # i2c_sda: GPIO08
+  # i2c_scl: GPIO18
+  # uart_tx: GPIO44
+  # uart_rx: GPIO43
+  # uart_tx2: GPIO13
+  # uart_rx2: GPIO14
+  # out_pin_2410: GPIO12
+  # buz_pin: GPIO15
 
   hidden_ssid: "false"
   log_level: DEBUG

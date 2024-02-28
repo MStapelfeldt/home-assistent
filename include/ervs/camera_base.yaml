@@ -7,19 +7,25 @@
 # The esp-cam doesn't perform well with NVR, but works to have a view to check what's going on.
 # It should work with OV2640 and OV5640, but the onboard Crystal is set at 24mhz and GPIO jumper unconnected.
 
+external_components:
+  - source: github://ssieb/esphome@cam_i2c
+    components: [ esp32_camera ]
+    refresh: 1min
+    
 esp32_camera:
   name: ESPcam
   external_clock:
-    pin: ${cam_clk_pin}
+    pin: GPIO03
     frequency: 20MHz
-  i2c_pins:
-    sda: ${i2c2_sda}
-    scl: ${i2c2_scl}
-  data_pins: [GPI040, GPIO42, GPIO21, GPIO41, GPIO39, GPIO12, GPIO11, GPIO09]
+  # i2c_pins:
+  #   sda: i2c2_sda
+  #   scl: i2c2_scl
+  data_pins: [GPIO40, GPIO42, GPIO21, GPIO41, GPIO39, GPIO12, GPIO11, GPIO09]
   vsync_pin: GPIO07
   href_pin: GPIO15
   pixel_clock_pin: GPIO38
-  reset_pin: GPI036
+  
+  reset_pin: GPIO36
   resolution: 1280x1024
   jpeg_quality: 15
   vertical_flip: False

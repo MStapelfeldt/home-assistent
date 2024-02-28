@@ -69,14 +69,14 @@ es7210:
 
 i2s_audio:
   - id: codec
-    i2s_lrclk_pin: ${sclk_pin2} #GPIO26 #ws
+    i2s_lrclk_pin: ${lrclk_pin2} #GPIO26 #ws
     i2s_bclk_pin: ${bclk_pin2} #GPIO27 #clk
     i2s_mclk_pin:
        number: ${mclk_pin} #GPIO0
        allow_other_uses: true
        ignore_strapping_warning: true
   - id: mic_adc
-    i2s_lrclk_pin: ${sclk_pin} #GPIO26 #ws
+    i2s_lrclk_pin: ${lrclk_pin} #GPIO26 #ws
     i2s_bclk_pin: ${bclk_pin} #GPIO27 #clk
     i2s_mclk_pin:
        number: ${mclk_pin} #GPIO0
