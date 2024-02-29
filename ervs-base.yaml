@@ -45,7 +45,9 @@ substitutions:
   # bclk_pin: GPIO17 # WS
   # lrclk_pin: GPIO47 # CLK
   # din_pin: GPIO04  # DAT
-  # mclk_pin: GPIO02
+  # bclk_pin2: GPIO37 # WS
+  # lrclk_pin2: GPIO01 # CLK
+  # mclk_pin: GPIO0
   # i2s_dout_pin: GPIO10
   # WS2812_pin: GPIO48 # LED Ring In Pin
   # i2c_sda: GPIO08
@@ -72,7 +74,7 @@ packages:
   ld2450_base: !include include/ervs/ld2450_base.yaml
   ld2410_base: !include include/ervs/ld2410_base.yaml
   # sgp40_base: !include include/sgp40_base.yaml
-  ov5640_base: !include include/ervs/camera_base.yaml
+  # ov5640_base: !include include/ervs/camera_base.yaml
   bme680_base: !include include/ervs/bme680_base.yaml
   bh1750_base: !include include/ervs/bh1750_base.yaml
   voice_base: !include include/ervs/voice_base.yaml

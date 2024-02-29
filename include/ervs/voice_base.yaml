@@ -305,7 +305,7 @@ light:
     segments:
       - id: led_light
         from: 1
-        to: 6 
+        to: 4 
     effects:
       - addressable_scan:
           name: Scan

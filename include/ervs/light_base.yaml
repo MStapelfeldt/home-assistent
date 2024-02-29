@@ -14,7 +14,7 @@ light:
     rgb_order: GRB
     #type: grb
     pin: ${WS2812_pin} # DIN pin of the LED Strip
-    num_leds: 8        # change the Number of LEDS according to your LED Strip.
+    num_leds: 6        # change the Number of LEDS according to your LED Strip.
     name: "Light"
     rmt_channel: 0
     chipset: ws2812
