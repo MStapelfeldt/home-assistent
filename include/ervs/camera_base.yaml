@@ -20,7 +20,7 @@ esp32_camera:
   # i2c_pins:
   #   sda: i2c2_sda
   #   scl: i2c2_scl
-  data_pins: [GPIO40, GPIO42, GPIO21, GPIO41, GPIO39, GPIO12, GPIO11, GPIO09]
+  data_pins: [GPIO40, GPIO42, GPIO21, GPIO41, GPIO39, GPIO12, GPIO11, GPIO18]
   vsync_pin: GPIO07
   href_pin: GPIO15
   pixel_clock_pin: GPIO38

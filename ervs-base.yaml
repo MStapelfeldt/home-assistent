@@ -16,7 +16,7 @@ substitutions:
   mclk_pin: GPIO00
   WS2812_pin: GPIO48 # LED Ring In Pin
   i2c_sda: GPIO08
-  i2c_scl: GPIO18
+  i2c_scl: GPIO09
   uart_tx: GPIO43
   uart_rx: GPIO44
   uart_tx2: GPIO14
@@ -32,7 +32,7 @@ substitutions:
   # cam_d4: GPIO39    # Camera Data pin 4
   # cam_d5: GPIO12    # Camera Data pin 5
   # cam_d6: GPIO11    # Camera Data pin 6
-  # cam_d7: GPIO09    # Camera Data pin 7
+  # cam_d7: GPIO18    # Camera Data pin 7
   # cam_vsync: GPIO07 # Camera VSYNC
   # cam_href: GPIO15  # Camera HREF
   # cam_pclk: GPIO38  # Camera Pixel Clock
