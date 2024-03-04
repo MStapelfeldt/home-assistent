@@ -158,10 +158,15 @@ voice_assistant:
         red: 0%
         green: 50%
         blue: 93%
+        brightness: !lambda |-
+          return id(va_status_brightness).state / 100.0;
+
   on_stt_vad_end:
     - light.turn_on:
         id: va_status
         effect: "Rainbow"
+        brightness: !lambda |-
+          return id(va_status_brightness).state / 100.0;
 
   on_tts_start:
     - light.turn_on:
@@ -170,6 +175,8 @@ voice_assistant:
         red: 0%
         green: 0%
         effect: "slow_pulse"
+        brightness: !lambda |-
+          return id(va_status_brightness).state / 100.0;
   on_end:
     - delay: 100ms
     - light.turn_off:
@@ -181,6 +188,8 @@ voice_assistant:
         green: 0%
         blue: 0%
         effect: "fast_pulse"
+        brightness: !lambda |-
+          return id(va_status_brightness).state / 100.0;
     - if:
         condition:
           switch.is_on: use_wake_word
@@ -310,7 +319,7 @@ light:
       - addressable_scan:
           name: Scan
           move_interval: 200ms
-          scan_width: 2
+          scan_width: 1
       - addressable_rainbow:
           name: Rainbow
           speed: 10

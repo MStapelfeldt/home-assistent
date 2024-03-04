@@ -6,24 +6,24 @@ substitutions:
   project_name: "HA Voice and Sensor board"
   project_version: "1.0.0"
 # Pin mapping for ERVS V0.2
-  bclk_pin: GPIO02 # WS
-  lrclk_pin: GPIO47 # CLK
-  din_pin: GPIO04  # DAT
-  mute_pin: GPIO16
-  i2s_dout_pin: GPIO10
-  bclk_pin2: GPIO37 # WS
-  lrclk_pin2: GPIO01 # CLK
-  mclk_pin: GPIO00
-  WS2812_pin: GPIO48 # LED Ring In Pin
-  i2c_sda: GPIO08
-  i2c_scl: GPIO09
-  uart_tx: GPIO43
-  uart_rx: GPIO44
-  uart_tx2: GPIO14
-  uart_rx2: GPIO13
-  out_pin_2410: GPIO46
-  cam_clk_pin: GPIO03
-  buz_pin: GPIO17
+  # bclk_pin: GPIO02 # WS
+  # lrclk_pin: GPIO47 # CLK
+  # din_pin: GPIO04  # DAT
+  # mute_pin: GPIO16
+  # i2s_dout_pin: GPIO10
+  # bclk_pin2: GPIO37 # WS
+  # lrclk_pin2: GPIO01 # CLK
+  # mclk_pin: GPIO00
+  # WS2812_pin: GPIO48 # LED Ring In Pin
+  # i2c_sda: GPIO08
+  # i2c_scl: GPIO09
+  # uart_tx: GPIO43
+  # uart_rx: GPIO44
+  # uart_tx2: GPIO14
+  # uart_rx2: GPIO13
+  # out_pin_2410: GPIO46
+  # cam_clk_pin: GPIO03
+  # buz_pin: GPIO17
   # substitutions can't be used in camera_base, so this is only for reference
   # cam_d0: GPIO40    # Camera Data pin 0
   # cam_d1: GPIO42    # Camera Data pin 1
@@ -42,22 +42,22 @@ substitutions:
   # cam_reset: GPIO36 # Camera Reset
   
 # Pin mapping for ERVS V0.1
-  # bclk_pin: GPIO17 # WS
-  # lrclk_pin: GPIO47 # CLK
-  # din_pin: GPIO04  # DAT
-  # bclk_pin2: GPIO37 # WS
-  # lrclk_pin2: GPIO01 # CLK
-  # mclk_pin: GPIO0
-  # i2s_dout_pin: GPIO10
-  # WS2812_pin: GPIO48 # LED Ring In Pin
-  # i2c_sda: GPIO08
-  # i2c_scl: GPIO18
-  # uart_tx: GPIO44
-  # uart_rx: GPIO43
-  # uart_tx2: GPIO13
-  # uart_rx2: GPIO14
-  # out_pin_2410: GPIO12
-  # buz_pin: GPIO15
+  bclk_pin: GPIO17 # WS
+  lrclk_pin: GPIO47 # CLK
+  din_pin: GPIO10  # DAT
+  bclk_pin2: GPIO37 # WS
+  lrclk_pin2: GPIO01 # CLK
+  mclk_pin: GPIO0
+  i2s_dout_pin: GPIO04
+  WS2812_pin: GPIO48 # LED Ring In Pin
+  i2c_sda: GPIO08
+  i2c_scl: GPIO18
+  uart_tx: GPIO44
+  uart_rx: GPIO43
+  uart_tx2: GPIO13
+  uart_rx2: GPIO14
+  out_pin_2410: GPIO12
+  buz_pin: GPIO15
 
   hidden_ssid: "false"
   log_level: DEBUG

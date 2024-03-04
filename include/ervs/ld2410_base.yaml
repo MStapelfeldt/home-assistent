@@ -286,8 +286,8 @@ light:
     name: "Sys Status"
     segments:
       - id: led_light
-        from: 7
-        to: 7
+        from: 5
+        to: 5
     internal: true
    
 # script:
