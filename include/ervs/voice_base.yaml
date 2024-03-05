@@ -69,7 +69,7 @@ api:
   on_client_connected:
         then:
           - delay: 50ms
-          - light.turn_off: led_ww
+          - light.turn_off: va_status
           - micro_wake_word.start:
   on_client_disconnected:
         then:
