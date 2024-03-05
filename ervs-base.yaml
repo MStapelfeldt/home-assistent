@@ -67,6 +67,12 @@ esphome:
   friendly_name: ${friendly_name}
   min_version: 2023.12.8
   name_add_mac_suffix: True
+  project:
+    name: ${project_name}
+    version: ${project_version}
+dashboard_import:
+  package_import_url: github://esphome/esphome-project-template/project-template-esp32.yaml@v6
+  import_full_config: true
 
 packages:
   device_base: !include include/ervs/esp32_base.yaml
