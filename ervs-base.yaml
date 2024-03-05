@@ -52,10 +52,10 @@ substitutions:
   WS2812_pin: GPIO48 # LED Ring In Pin
   i2c_sda: GPIO08
   i2c_scl: GPIO18
-  uart_tx: GPIO44
-  uart_rx: GPIO43
-  uart_tx2: GPIO13
-  uart_rx2: GPIO14
+  uart_tx: GPIO43
+  uart_rx: GPIO44
+  uart_tx2: GPIO14
+  uart_rx2: GPIO13
   out_pin_2410: GPIO12
   buz_pin: GPIO15
 
