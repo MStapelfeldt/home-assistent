@@ -3,8 +3,8 @@ substitutions:
   variant: esp32s3
   name: esp32-s3-ervs
   friendly_name: ESP32 S3 ERVS
-  project_name: "HA Voice and Sensor board"
-  project_version: "1.0.0"
+  project_name: ervs.esp32-s3-sensor-board
+  project_version: "0.0.1"
 # Pin mapping for ERVS V0.2
   # bclk_pin: GPIO02 # WS
   # lrclk_pin: GPIO47 # CLK
