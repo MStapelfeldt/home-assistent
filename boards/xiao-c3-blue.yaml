@@ -3,5 +3,5 @@ substitutions:
   pin_ld2450_tx: GPIO9
   pin_ld2450_rx: GPIO10
   pin_ws2812: GPIO8
-  pin_bh1750_sda: GPIO5
-  pin_bh1750_scl: GPIO4
+  pin_bh1750_sda: GPIO21
+  pin_bh1750_scl: GPIO7
