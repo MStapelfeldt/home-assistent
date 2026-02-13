@@ -1,0 +1,7 @@
+substitutions:
+  pin_pir: GPIO9
+  pin_ld2450_tx: GPIO3
+  pin_ld2450_rx: GPIO4
+  pin_ws2812: GPIO2
+  pin_bh1750_sda: GPIO20
+  pin_bh1750_scl: GPIO10
