@@ -1,5 +1,6 @@
+
 packages:
-  esphome.bluetooth-proxy: github://esphome/bluetooth-proxies/esp32-generic-c3.yaml@main
+  esphome.bluetooth-proxy: github://esphome/bluetooth-proxies/esp32-generic/esp32-generic-c3.yaml@main
 api:
   on_client_connected:
      - esp32_ble_tracker.start_scan:
