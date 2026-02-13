@@ -53,12 +53,6 @@ binary_sensor:
     has_target:
       name: Presence
     id: mmwave
-    filters:
-      - delayed_on: 50ms
-    device_class: motion
-    on_release:
-      then:
-        - light.turn_off: sys_status
     has_moving_target:
       name: Moving Target
     has_still_target:
