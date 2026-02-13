@@ -39,10 +39,10 @@ binary_sensor:
     id: occupancy
     device_class: occupancy
     lambda: |-
-      if ( id(mmwave).state and id(pir).state) {
+      if ( id(mmwave_presence).state and id(pir).state) {
         return true;
       }
-      else if (id(mmwave).state == 0) {
+      else if (id(mmwave_presence).state == 0) {
         return false;
       }
       else {
@@ -52,7 +52,7 @@ binary_sensor:
     ld2450_id: ld2450_radar
     has_target:
       name: Presence
-    id: mmwave
+      id: mmwave_presence
     has_moving_target:
       name: Moving Target
     has_still_target:
@@ -122,9 +122,9 @@ switch:
         condition:
           binary_sensor.is_on: occupancy
         then:
-          - light.turn_on: led
+          - light.turn_on: sys_status
     on_turn_off:
-      - light.turn_off: led
+      - light.turn_off: sys_status
   - platform: ld2450
     ld2450_id: ld2450_radar
     bluetooth:
@@ -305,7 +305,7 @@ interval:
           condition:
             and:
               - binary_sensor.is_on: pir
-              - binary_sensor.is_on: mmwave
+              - binary_sensor.is_on: mmwave_presence
           then:
             - light.turn_on:
                 id: sys_status
@@ -316,7 +316,7 @@ interval:
           condition:
             and:
               - binary_sensor.is_off: pir
-              - binary_sensor.is_on: mmwave
+              - binary_sensor.is_on: mmwave_presence
           then:
             - light.turn_on:
                 id: sys_status
@@ -327,7 +327,7 @@ interval:
           condition:
             and:
               - binary_sensor.is_on: pir
-              - binary_sensor.is_off: mmwave
+              - binary_sensor.is_off: mmwave_presence
           then:
             - light.turn_on:
                 id: sys_status
