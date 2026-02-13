@@ -60,7 +60,6 @@ binary_sensor:
   - platform: template
     id: is_dark
     name: "${friendly_name} Dunkel"
-    device_class: darkness
     lambda: |-
       return (id(light_level).state < id(light_threshold).state);
   - platform: template
