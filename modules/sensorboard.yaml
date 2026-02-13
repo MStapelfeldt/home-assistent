@@ -174,6 +174,28 @@ text_sensor:
         name: "Target-3 Direction"
 
 sensor:
+  - platform: wifi_signal
+    name: "WiFi Signal (dBm)"
+    id: wifi_signal_db
+    update_interval: 60s
+    unit_of_measurement: "dBm"
+    device_class: signal_strength
+    accuracy_decimals: 0
+    entity_category: "diagnostic"
+
+  - platform: copy
+    source_id: wifi_signal_db
+    name: "WiFi Signal (%)"
+    filters:
+      - lambda: return min(max(2 * (x + 100.0), 0.0), 100.0);
+    unit_of_measurement: "%"
+    device_class: ""
+    accuracy_decimals: 0
+    entity_category: "diagnostic"
+  - platform: uptime
+    name: "Uptime Sensor"
+    update_interval: 60s
+    entity_category: "diagnostic"
   - platform: bh1750
     id: light_level
     name: "${friendly_name} Helligkeit"
