@@ -39,15 +39,17 @@ binary_sensor:
     id: occupancy
     device_class: occupancy
     lambda: |-
-      if ( id(mmwave_presence).state and id(pir).state) {
+      if ( id(mmwave_presence).state or id(pir).state) {
         return true;
       }
-      else if (id(mmwave_presence).state == 0) {
+      else if (!id(mmwave_presence).state) {
         return false;
       }
       else {
         return id(occupancy).state;
       }
+    filters:
+      - delayed_off: 10s
   - platform: ld2450
     ld2450_id: ld2450_radar
     has_target:
