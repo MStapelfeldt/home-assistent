@@ -20,6 +20,46 @@ psram:
   mode: octal
   speed: 80MHz
 
+# Configuration for the status LED light
+light:
+  - platform: status_led
+    id: light0
+    name: "Voice Assistant State"
+    pin:
+      number: GPIO21
+      inverted: true
+
+# Configuration for I2S audio
+i2s_audio:
+  i2s_lrclk_pin: GPIO46 # Note: labeled as "useless"
+  i2s_bclk_pin: GPIO42
+  # i2s_lrclk_pin: 42
+ 
+microphone:
+  - platform: i2s_audio
+    id: external_mic
+    adc_type: external
+    i2s_din_pin: GPIO41
+    pdm: true
+    sample_rate: 16000
+    bits_per_sample: 16bit
+    channel: left
+    
+voice_assistant:
+  microphone: external_mic
+  use_wake_word: True
+  noise_suppression_level: 2
+
+switch:
+  - platform: template
+    name: capture
+    optimistic: True
+    id: capture
+    turn_on_action:
+      - voice_assistant.start_continuous
+    turn_off_action:
+      - voice_assistant.stop:    
+      
 esp32_camera_web_server:
   - port: 8080
     mode: stream
