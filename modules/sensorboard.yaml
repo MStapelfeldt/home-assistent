@@ -20,6 +20,9 @@ binary_sensor:
     device_class: motion
     pin:
       number: ${pin_pir}
+      mode:
+        input: true
+        pulldown: true
     filters:
       - delayed_on: 50ms
       - delayed_off: 10s
