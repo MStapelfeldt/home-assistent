@@ -1,0 +1,96 @@
+esphome:
+  name: esp32s3
+  platformio_options:
+    build_flags: -DBOARD_HAS_PSRAM
+    board_build.arduino.memory_type: qio_opi
+    board_build.f_flash: 80000000L
+    board_build.flash_mode: qio
+
+esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: arduino
+i2c:
+  - id: camera_i2c
+    sda: GPIO40
+    scl: GPIO39
+    frequency: 400kHz
+
+psram:
+  mode: octal
+  speed: 80MHz
+
+# Configuration for the status LED light
+light:
+  - platform: status_led
+    id: light0
+    name: "Voice Assistant State"
+    pin:
+      number: GPIO21
+      inverted: true
+
+# Configuration for I2S audio
+i2s_audio:
+  i2s_lrclk_pin: GPIO46 # Note: labeled as "useless"
+  i2s_bclk_pin: GPIO42
+  # i2s_lrclk_pin: 42
+ 
+microphone:
+  - platform: i2s_audio
+    id: external_mic
+    adc_type: external
+    i2s_din_pin: GPIO41
+    pdm: true
+    sample_rate: 16000
+    bits_per_sample: 16bit
+    channel: left
+    
+voice_assistant:
+  microphone: external_mic
+  use_wake_word: True
+  noise_suppression_level: 2
+
+switch:
+  - platform: template
+    name: capture
+    optimistic: True
+    id: capture
+    turn_on_action:
+      - voice_assistant.start_continuous
+    turn_off_action:
+      - voice_assistant.stop:    
+      
+esp32_camera_web_server:
+  - port: 8080
+    mode: stream
+  - port: 8081
+    mode: snapshot
+
+esp32_camera:
+  id: espcam
+  name: My Camera
+  external_clock:
+    pin: GPIO10
+    frequency: 20MHz
+  i2c_id: camera_i2c
+  data_pins: [GPIO15, GPIO17, GPIO18, GPIO16, GPIO14, GPIO12, GPIO11, GPIO48]
+  vsync_pin: GPIO38
+  href_pin: GPIO47
+  pixel_clock_pin: GPIO13
+  resolution: 800x600   # SVGA
+  # resolution: 640x480  # VGA
+  jpeg_quality: 28
+  frame_buffer_count: 2
+  # optioneel eerst testen met lagere resolutie:
+
+  aec_mode: auto
+  aec2: true
+  ae_level: 2  
+
+  agc_mode: auto
+  agc_gain_ceiling: 128x
+  wb_mode: auto  
+
+  brightness: 1            # -2..+2
+  contrast: 1              # -2..+2
+  saturation: -1           # -2..+2, iets lager dempt ruisachtig kleurzwabberen
