@@ -1,5 +1,5 @@
 substitutions:  
-  pin_pir: GPIO9
+  pin_pir: GPIO6
   pin_ld2450_tx: GPIO4
   pin_ld2450_rx: GPIO3
   pin_ws2812: GPIO2
