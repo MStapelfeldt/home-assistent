@@ -1,0 +1,8 @@
+substitutions:  
+  pin_pir: GPIO5
+  pin_ld2450_tx: GPIO4
+  pin_ld2450_rx: GPIO3
+  pin_ws2812: GPIO2
+  pin_bh1750_sda: GPIO6
+  pin_bh1750_scl: GPIO7
+  onboard_led_pin: GPIO8
