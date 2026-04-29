@@ -292,12 +292,21 @@ light:
     id: sys_status
     name: "${friendly_name} Status LED"
     internal: true
+  # - platform: esp32_rmt_led_strip
+  #   id: onboard_led
+  #   name: "Onboard RGB LED"
+  #   pin: ${onboard_led_pin}
+  #   num_leds: 1
+  #   chipset: ws2812
+  #   rgb_order: GRB
   - platform: esp32_rmt_led_strip
     id: onboard_led
     name: "Onboard RGB LED"
-    pin: ${onboard_led_pin}
+    pin:
+      number: ${onboard_led_pin}
+      ignore_strapping_warning: True
     num_leds: 1
-    chipset: ws2812
+    chipset: WS2812
     rgb_order: GRB
 
 interval:
