@@ -312,9 +312,10 @@ light:
 interval:
   - interval: 200ms
     then:
-      - if: # 1. Dunkel & Belegt → GELB (höchste Priorität)
+      - if: # 1. Dunkel & Belegt → BLAU
           condition:
             and:
+              - switch.is_on: presence_light
               - binary_sensor.is_on: occupancy
               - binary_sensor.is_on: is_dark
           then:
@@ -323,9 +324,11 @@ interval:
                 red: 0%
                 green: 0%
                 blue: 50%
+
       - if: # 2. PIR + Radar → ROT
           condition:
             and:
+              - switch.is_on: presence_light
               - binary_sensor.is_on: pir
               - binary_sensor.is_on: mmwave_presence
           then:
@@ -334,9 +337,11 @@ interval:
                 red: 50%
                 green: 0%
                 blue: 0%
+
       - if: # 3. Nur Radar → GRÜN
           condition:
             and:
+              - switch.is_on: presence_light
               - binary_sensor.is_off: pir
               - binary_sensor.is_on: mmwave_presence
           then:
@@ -345,9 +350,11 @@ interval:
                 red: 0%
                 green: 50%
                 blue: 0%
+
       - if: # 4. Nur PIR → GELB gedimmt
           condition:
             and:
+              - switch.is_on: presence_light
               - binary_sensor.is_on: pir
               - binary_sensor.is_off: mmwave_presence
           then:
@@ -356,9 +363,11 @@ interval:
                 red: 50%
                 green: 50%
                 blue: 0%
+
       - if: # 5. Dunkel, aber niemand da → BLAU gedimmt
           condition:
             and:
+              - switch.is_on: presence_light
               - binary_sensor.is_off: occupancy
               - binary_sensor.is_on: is_dark
           then:
@@ -367,9 +376,11 @@ interval:
                 red: 0%
                 green: 0%
                 blue: 0%
+
       - if: # 6. Hell & leer → LED aus
           condition:
             and:
+              - switch.is_on: presence_light
               - binary_sensor.is_off: occupancy
               - binary_sensor.is_off: is_dark
           then:
