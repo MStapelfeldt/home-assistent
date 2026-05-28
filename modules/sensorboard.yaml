@@ -1,8 +1,8 @@
-esphome:
-  on_boot:
-    priority: -100
-    then:
-      - script.execute: update_status_led
+# esphome:
+#   on_boot:
+#     priority: -100
+#     then:
+#       - script.execute: update_status_led
 i2c:
   sda: ${pin_bh1750_sda}
   scl: ${pin_bh1750_scl}
