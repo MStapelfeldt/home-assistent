@@ -84,7 +84,6 @@ number:
     step: 1
     initial_value: 30
     optimistic: true
-    entity_category: config
     on_value:
       then:
         - script.execute: update_status_led
@@ -135,7 +134,6 @@ switch:
   - platform: template
     name: Presence Light
     id: presence_light
-    entity_category: config
     optimistic: true
     restore_mode: RESTORE_DEFAULT_ON
 
