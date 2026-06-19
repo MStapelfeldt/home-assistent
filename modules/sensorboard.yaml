@@ -27,9 +27,13 @@ binary_sensor:
       number: ${pin_pir}
       mode:
         input: true
-        pulldown: true
     filters:
       - delayed_on: 500ms
+    on_state:
+      then:
+        - logger.log:
+            format: "PIR state = %d"
+            args: ['id(pir).state']
     on_press:
       - script.execute: update_status_led
     on_release:
