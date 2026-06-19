@@ -29,7 +29,7 @@ binary_sensor:
         input: true
         pulldown: true
     filters:
-      - delayed_on: 50ms
+      - delayed_on: 500ms
     on_press:
       - script.execute: update_status_led
     on_release:
