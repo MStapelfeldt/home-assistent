@@ -1,8 +1,10 @@
 
+packages:
+  esphome.bluetooth-proxy: github://esphome/bluetooth-proxies/esp32-generic/esp32-generic-c5.yaml@main
 
 api:
   on_client_connected:
-     - esp32_ble_tracker.start_scan:
+    - esp32_ble_tracker.start_scan:
         continuous: true
   on_client_disconnected:
     if:
@@ -20,6 +22,8 @@ esp32:
       CONFIG_SOC_WIFI_HE_SUPPORT: y
       CONFIG_ESP_WIFI_11AX_SUPPORT: y
       CONFIG_SOC_WIFI_SUPPORT_5G: y
+      CONFIG_ESP_TASK_WDT_TIMEOUT_S: "10"
+      CONFIG_BT_BLE_50_FEATURES_SUPPORTED: y
 
 esp32_ble_tracker:
   id: ble_tracker
@@ -27,6 +31,7 @@ esp32_ble_tracker:
     active: true
     interval: 320ms
     window: 300ms
-    continuous: true
+    continuous: false
+
 bluetooth_proxy:
   active: true

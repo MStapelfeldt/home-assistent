@@ -31,13 +31,7 @@ binary_sensor:
       - delayed_on: 500ms
     on_state:
       then:
-        - logger.log:
-            format: "PIR state = %d"
-            args: ['id(pir).state']
-    on_press:
-      - script.execute: update_status_led
-    on_release:
-      - script.execute: update_status_led
+        - script.execute: update_status_led
   - platform: template
     name: "Occupancy"
     id: occupancy
@@ -45,20 +39,18 @@ binary_sensor:
     lambda: |-
       return id(mmwave_presence).state || id(pir).state;
     filters:
-      - delayed_off: 10s
-    on_press:
-      - script.execute: update_status_led
-    on_release:
-      - script.execute: update_status_led
+      - delayed_off: 1s
+    on_state:
+      then:
+        - script.execute: update_status_led
   - platform: ld2450
     ld2450_id: ld2450_radar
     has_target:
       name: Presence
       id: mmwave_presence
-      on_press:
-        - script.execute: update_status_led
-      on_release:
-        - script.execute: update_status_led
+      on_state:
+        then:
+          - script.execute: update_status_led
     has_moving_target:
       name: Moving Target
     has_still_target:
@@ -68,17 +60,15 @@ binary_sensor:
     name: "${friendly_name} Dunkel"
     lambda: |-
       return id(light_level).state < id(light_threshold).state;
-    on_press:
-      - script.execute: update_status_led
-    on_release:
-      - script.execute: update_status_led
+    on_state:
+      then:
+        - script.execute: update_status_led
   - platform: template
     id: dark_and_occupied
     name: "${friendly_name} Dunkel & Belegt"
     device_class: occupancy
     lambda: |-
       return (id(is_dark).state && id(occupancy).state);
-
 number:
   - platform: template
     id: status_led_brightness
@@ -332,7 +322,6 @@ script:
           then:
             - light.turn_off: sys_status
           else:
-            # PIR + Radar = Rot
             - if:
                 condition:
                   and:
@@ -346,12 +335,8 @@ script:
                       green: 0%
                       blue: 0%
                 else:
-                  # Nur Radar = Grün
                   - if:
-                      condition:
-                        and:
-                          - binary_sensor.is_off: pir
-                          - binary_sensor.is_on: mmwave_presence
+                      condition: binary_sensor.is_on: mmwave_presence
                       then:
                         - light.turn_on:
                             id: sys_status
@@ -360,12 +345,8 @@ script:
                             green: 100%
                             blue: 0%
                       else:
-                        # Nur PIR = Gelb
                         - if:
-                            condition:
-                              and:
-                                - binary_sensor.is_on: pir
-                                - binary_sensor.is_off: mmwave_presence
+                            condition: binary_sensor.is_on: pir
                             then:
                               - light.turn_on:
                                   id: sys_status
@@ -374,12 +355,8 @@ script:
                                   green: 100%
                                   blue: 0%
                             else:
-                              # Dunkel + Belegt = Blau
                               - if:
-                                  condition:
-                                    and:
-                                      - binary_sensor.is_on: is_dark
-                                      - binary_sensor.is_on: occupancy
+                                  condition: binary_sensor.is_on: dark_and_occupied
                                   then:
                                     - light.turn_on:
                                         id: sys_status
