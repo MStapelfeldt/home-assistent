@@ -21,7 +21,7 @@ ld2450:
 binary_sensor:
   - platform: gpio
     id: pir
-    name: "${friendly_name} PIR"
+    name: PIR
     device_class: motion
     pin:
       number: ${pin_pir}
@@ -57,7 +57,7 @@ binary_sensor:
       name: Still Target
   - platform: template
     id: is_dark
-    name: "${friendly_name} Dunkel"
+    name: Dunkel
     lambda: |-
       return id(light_level).state < id(light_threshold).state;
     on_state:
@@ -65,14 +65,14 @@ binary_sensor:
         - script.execute: update_status_led
   - platform: template
     id: dark_and_occupied
-    name: "${friendly_name} Dunkel & Belegt"
+    name: Dunkel & Belegt
     device_class: occupancy
     lambda: |-
       return (id(is_dark).state && id(occupancy).state);
 number:
   - platform: template
     id: status_led_brightness
-    name: "${friendly_name} LED Helligkeit"
+    name: LED Helligkeit
     min_value: 0
     max_value: 100
     step: 1
@@ -83,7 +83,7 @@ number:
         - script.execute: update_status_led
   - platform: template
     id: light_threshold
-    name: "${friendly_name} Helligkeitsschwelle"
+    name: Helligkeitsschwelle
     min_value: 1
     max_value: 200
     step: 1
@@ -203,7 +203,7 @@ sensor:
     entity_category: "diagnostic"
   - platform: bh1750
     id: light_level
-    name: "${friendly_name} Helligkeit"
+    name: Helligkeit
     address: 0x23
     update_interval: 1s
     filters:
@@ -299,16 +299,8 @@ light:
     num_leds: 1
     chipset: ws2812
     id: sys_status
-    name: "${friendly_name} Status LED"
+    name: Status LED
     internal: true
-  - platform: esp32_rmt_led_strip
-    id: onboard_led
-    name: "Onboard RGB LED"
-    pin:
-      number: ${onboard_led_pin}
-    num_leds: 1
-    chipset: WS2812
-    rgb_order: GRB
 
 script:
   - id: update_status_led

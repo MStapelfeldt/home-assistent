@@ -6,3 +6,13 @@ substitutions:
   pin_bh1750_sda: GPIO7
   pin_bh1750_scl: GPIO6
   onboard_led_pin: GPIO8
+
+light:
+  - platform: esp32_rmt_led_strip
+    id: onboard_led
+    name: "Onboard RGB LED"
+    pin:
+      number: ${onboard_led_pin}
+    num_leds: 1
+    chipset: WS2812
+    rgb_order: GRB

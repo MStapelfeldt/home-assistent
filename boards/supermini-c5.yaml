@@ -5,4 +5,3 @@ substitutions:
   pin_ws2812: GPIO3
   pin_bh1750_sda: GPIO7
   pin_bh1750_scl: GPIO6
-  onboard_led_pin: GPIO8
