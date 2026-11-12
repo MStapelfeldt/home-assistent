@@ -1,0 +1,32 @@
+
+
+api:
+  on_client_connected:
+     - esp32_ble_tracker.start_scan:
+        continuous: true
+  on_client_disconnected:
+    if:
+      condition:
+        not:
+          api.connected:
+      then:
+        - esp32_ble_tracker.stop_scan:
+
+esp32:
+  variant: esp32c5
+  framework:
+    type: esp-idf
+    sdkconfig_options:
+      CONFIG_SOC_WIFI_HE_SUPPORT: y
+      CONFIG_ESP_WIFI_11AX_SUPPORT: y
+      CONFIG_SOC_WIFI_SUPPORT_5G: y
+
+esp32_ble_tracker:
+  id: ble_tracker
+  scan_parameters:
+    active: true
+    interval: 320ms
+    window: 300ms
+    continuous: true
+bluetooth_proxy:
+  active: true
