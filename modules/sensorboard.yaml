@@ -186,6 +186,7 @@ sensor:
     address: 0x23
     update_interval: 1s
     filters:
+      - multiply: 10
       - sliding_window_moving_average:
           window_size: 10
           send_every: 10
