@@ -1,8 +1,8 @@
 esphome:
-  name: esp32-bluetooth-proxy
-  friendly_name: Bluetooth Proxy
+  name: ${name}
+  name_add_mac_suffix: false
+  friendly_name: ${friendly_name}
   min_version: 2026.3.0
-  name_add_mac_suffix: true
 
 esp32:
   board: esp32-c5
@@ -40,8 +40,8 @@ logger:
   baud_rate: 0  # 0 Enables logging, but disables serial-port logging to free CPU and memory
 
 ota:
-  - platform: esphome
-    id: ota_esphome
+  platform: esphome
+  encryption:
 
 esp32_ble_tracker:
   id: ble_tracker
@@ -54,11 +54,29 @@ esp32_ble_tracker:
 bluetooth_proxy:
   active: true
 
-button:
-  - platform: safe_mode
-    id: button_safe_mode
-    name: Safe Mode Boot
+sensor:
+  - platform: wifi_signal
+    name: "WiFi Signal (dBm)"
+    id: wifi_signal_db
+    update_interval: 60s
+    unit_of_measurement: "dBm"
+    device_class: signal_strength
+    accuracy_decimals: 0
+    entity_category: "diagnostic"
 
-  - platform: factory_reset
-    id: factory_reset_btn
-    name: Factory reset
+  - platform: copy
+    source_id: wifi_signal_db
+    name: "WiFi Signal (%)"
+    filters:
+      - lambda: return min(max(2 * (x + 100.0), 0.0), 100.0);
+    unit_of_measurement: "%"
+    device_class: ""
+    accuracy_decimals: 0
+    entity_category: "diagnostic"
+  - platform: uptime
+    name: "Uptime Sensor"
+    update_interval: 60s
+    entity_category: "diagnostic"
+button:
+  - platform: restart
+    name: "Neu starten"
